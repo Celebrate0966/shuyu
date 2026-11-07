@@ -1,0 +1,685 @@
+<title>数愈</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Noto+Sans+SC:wght@300;400;500&display=swap">
+
+<style>
+  /* =============================================
+     DESIGN TOKENS
+     Layout: single-column, generous whitespace,
+     content-width 680px centered, left-aligned text
+     ============================================= */
+  :root {
+    --bg:          #FAF8F5;
+    --bg-alt:      #F3EFE9;
+    --fg:          #1A1714;
+    --fg-muted:    #6B6460;
+    --accent:      #B85C38;
+    --accent-soft: #E8D5CB;
+    --border:      #E0D8D0;
+    --card-bg:     #FFFFFF;
+
+    --font-serif:  'Noto Serif SC', 'Songti SC', serif;
+    --font-sans:   'Noto Sans SC', 'PingFang SC', sans-serif;
+
+    --r:    8px;
+    --max:  680px;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg:          #1C1915;
+      --bg-alt:      #252119;
+      --fg:          #EDE8E2;
+      --fg-muted:    #9B9490;
+      --accent:      #D4785A;
+      --accent-soft: #3D2820;
+      --border:      #332E28;
+      --card-bg:     #221F1B;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg:          #1C1915;
+    --bg-alt:      #252119;
+    --fg:          #EDE8E2;
+    --fg-muted:    #9B9490;
+    --accent:      #D4785A;
+    --accent-soft: #3D2820;
+    --border:      #332E28;
+    --card-bg:     #221F1B;
+    color-scheme: dark;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-sans);
+    font-size: 15px;
+    line-height: 1.75;
+    padding-left:  max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    padding-block: 0;
+  }
+
+  .wrap {
+    max-width: var(--max);
+    margin: 0 auto;
+  }
+
+  /* ——— NAV ——— */
+  nav {
+    padding-block: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+  }
+  .logo {
+    font-family: var(--font-serif);
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--fg);
+    letter-spacing: .02em;
+    text-decoration: none;
+  }
+  .logo span {
+    color: var(--accent);
+  }
+  .nav-link {
+    font-size: 13px;
+    color: var(--fg-muted);
+    text-decoration: none;
+    transition: color .2s;
+  }
+  .nav-link:hover { color: var(--accent); }
+
+  /* ——— HERO ——— */
+  .hero {
+    padding-block: 72px 56px;
+  }
+  .hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--accent);
+    background: var(--accent-soft);
+    padding: 4px 10px;
+    border-radius: 20px;
+    margin-bottom: 24px;
+    letter-spacing: .04em;
+  }
+  .hero-eyebrow svg { width: 12px; height: 12px; }
+  h1 {
+    font-family: var(--font-serif);
+    font-size: clamp(28px, 5vw, 40px);
+    font-weight: 700;
+    line-height: 1.3;
+    text-wrap: balance;
+    margin-bottom: 16px;
+    color: var(--fg);
+  }
+  .hero-sub {
+    font-size: 15px;
+    color: var(--fg-muted);
+    max-width: 480px;
+    margin-bottom: 32px;
+    line-height: 1.8;
+  }
+  .btn-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 20px;
+    border-radius: var(--r);
+    font-size: 14px;
+    font-weight: 500;
+    font-family: var(--font-sans);
+    cursor: pointer;
+    text-decoration: none;
+    transition: opacity .15s, transform .15s;
+    border: none;
+  }
+  .btn:hover { opacity: .85; transform: translateY(-1px); }
+  .btn-primary {
+    background: var(--accent);
+    color: #fff;
+  }
+  .btn-ghost {
+    background: transparent;
+    color: var(--fg-muted);
+    border: 1px solid var(--border);
+  }
+
+  /* ——— SECTION TITLE ——— */
+  .sec-title {
+    font-family: var(--font-serif);
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--fg);
+  }
+  .sec-lead {
+    font-size: 13px;
+    color: var(--fg-muted);
+    margin-bottom: 28px;
+  }
+  section { padding-block: 48px; border-top: 1px solid var(--border); }
+
+  /* ——— KNOWLEDGE BASE ——— */
+  .qa-list { display: flex; flex-direction: column; gap: 2px; }
+  .qa-item {
+    border: 1px solid var(--border);
+    border-radius: var(--r);
+    overflow: hidden;
+    background: var(--card-bg);
+  }
+  .qa-q {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 16px;
+    background: none;
+    border: none;
+    font-family: var(--font-sans);
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--fg);
+    cursor: pointer;
+    text-align: left;
+    gap: 12px;
+  }
+  .qa-q:hover { color: var(--accent); }
+  .qa-q:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+  .qa-chevron {
+    flex-shrink: 0;
+    width: 16px; height: 16px;
+    color: var(--fg-muted);
+    transition: transform .22s;
+  }
+  .qa-item.open .qa-chevron { transform: rotate(180deg); }
+  .qa-a {
+    display: none;
+    padding: 0 16px 16px;
+    font-size: 13.5px;
+    color: var(--fg-muted);
+    line-height: 1.8;
+    border-top: 1px solid var(--border);
+  }
+  .qa-a p { margin-top: 12px; }
+  .qa-a p:first-child { margin-top: 10px; }
+  .qa-item.open .qa-a { display: block; }
+  .tag {
+    display: inline-block;
+    font-size: 11px;
+    padding: 2px 7px;
+    border-radius: 4px;
+    font-weight: 500;
+    margin-right: 4px;
+    margin-bottom: 4px;
+  }
+  .tag-warn { background: #FEF3C7; color: #92400E; }
+  .tag-ok   { background: #D1FAE5; color: #065F46; }
+  .tag-no   { background: #FEE2E2; color: #991B1B; }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .tag-warn { background:#3D2F00; color:#FCD34D; }
+    :root:not([data-theme="light"]) .tag-ok   { background:#052E16; color:#6EE7B7; }
+    :root:not([data-theme="light"]) .tag-no   { background:#2D0909; color:#FCA5A5; }
+  }
+  :root[data-theme="dark"] .tag-warn { background:#3D2F00; color:#FCD34D; }
+  :root[data-theme="dark"] .tag-ok   { background:#052E16; color:#6EE7B7; }
+  :root[data-theme="dark"] .tag-no   { background:#2D0909; color:#FCA5A5; }
+
+  /* ——— TOOLS ——— */
+  .tools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px;
+  }
+  .tool-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--r);
+    padding: 16px;
+  }
+  .tool-platform {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    margin-bottom: 6px;
+  }
+  .tool-name {
+    font-family: var(--font-serif);
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: var(--fg);
+  }
+  .tool-desc {
+    font-size: 12.5px;
+    color: var(--fg-muted);
+    line-height: 1.65;
+    margin-bottom: 12px;
+  }
+  .tool-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 500;
+  }
+  .tool-link:hover { text-decoration: underline; }
+  .tool-note {
+    margin-top: 8px;
+    font-size: 11.5px;
+    color: var(--fg-muted);
+    background: var(--bg-alt);
+    border-radius: 4px;
+    padding: 6px 8px;
+    line-height: 1.6;
+  }
+
+  /* ——— SERVICE / PRICING ——— */
+  .service-box {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--r);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .service-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .service-title {
+    font-family: var(--font-serif);
+    font-size: 17px;
+    font-weight: 600;
+  }
+  .price {
+    font-family: var(--font-serif);
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--accent);
+    white-space: nowrap;
+  }
+  .price-unit { font-size: 13px; color: var(--fg-muted); font-weight: 400; }
+  .service-items {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .service-items li {
+    font-size: 13.5px;
+    color: var(--fg-muted);
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .service-items li::before {
+    content: "✓";
+    color: var(--accent);
+    font-weight: 600;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .disclaimer {
+    font-size: 12px;
+    color: var(--fg-muted);
+    background: var(--bg-alt);
+    border-left: 3px solid var(--accent-soft);
+    padding: 10px 12px;
+    border-radius: 0 var(--r) var(--r) 0;
+    line-height: 1.7;
+  }
+
+  /* ——— CONTACT ——— */
+  .contact-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .contact-card {
+    flex: 1;
+    min-width: 200px;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--r);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .contact-label {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--fg-muted);
+    text-transform: uppercase;
+    letter-spacing: .06em;
+  }
+  .contact-val {
+    font-family: var(--font-serif);
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--fg);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .copy-btn {
+    background: var(--bg-alt);
+    border: none;
+    border-radius: 4px;
+    padding: 3px 8px;
+    font-size: 11px;
+    color: var(--fg-muted);
+    cursor: pointer;
+    font-family: var(--font-sans);
+    transition: background .15s;
+  }
+  .copy-btn:hover { background: var(--accent-soft); color: var(--accent); }
+  .contact-note { font-size: 12px; color: var(--fg-muted); line-height: 1.6; }
+
+  /* ——— FOOTER ——— */
+  footer {
+    padding-block: 32px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .footer-logo {
+    font-family: var(--font-serif);
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--fg);
+  }
+  .footer-logo span { color: var(--accent); }
+  .footer-copy { font-size: 12px; color: var(--fg-muted); }
+
+  @media (max-width: 480px) {
+    .hero { padding-block: 48px 36px; }
+    section { padding-block: 36px; }
+    .tools-grid { grid-template-columns: 1fr 1fr; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .btn, .qa-chevron { transition: none; }
+  }
+</style>
+
+<!-- NAV -->
+<nav>
+  <div class="wrap" style="display:contents">
+    <a href="#" class="logo">数<span>愈</span></a>
+    <a href="#contact" class="nav-link">联系我</a>
+  </div>
+</nav>
+
+<div class="wrap">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-eyebrow">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.663 17h4.673M12 3v1m6.364 1.636-.707.707M21 12h-1M4 12H3m3.343-5.657-.707-.707m2.828 9.9a5 5 0 1 1 7.072 0l-.548.547A3.374 3.374 0 0 0 14 18.469V19a2 2 0 1 1-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+      AI 时代的数据守护
+    </div>
+    <h1>您身边的<br>数据恢复专家</h1>
+    <p class="hero-sub">误删文件、手机数据丢失、格式化恢复——从工具推荐到远程协助，帮您找回珍贵数据。数据无价，先试试再说。</p>
+    <div class="btn-row">
+      <a href="#service" class="btn btn-primary">¥19.9 远程协助</a>
+      <a href="#tools" class="btn btn-ghost">免费获取工具</a>
+    </div>
+  </div>
+
+  <!-- KNOWLEDGE BASE -->
+  <section id="knowledge">
+    <p class="sec-title">常见问题解答</p>
+    <p class="sec-lead">恢复数据前，先了解实际情况——以免花冤枉钱，也以免错过最佳时机。</p>
+    <div class="qa-list">
+
+      <div class="qa-item">
+        <button class="qa-q" aria-expanded="false">
+          微信聊天记录删了还能恢复吗？
+          <svg class="qa-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
+        </button>
+        <div class="qa-a">
+          <p><span class="tag tag-no">极难</span> <span class="tag tag-warn">刷机后基本无望</span></p>
+          <p>微信聊天记录存储在应用的私有沙盒目录中，普通软件无法直接访问。未刷机、未清除数据的情况下，可以尝试从手机备份中找回，但成功率也很低。</p>
+          <p>刷机后覆盖了原数据，几乎不可能恢复。建议以后开启微信内置备份（微信→我→设置→聊天→聊天记录备份与迁移），定期备份到电脑或微信云。</p>
+        </div>
+      </div>
+
+      <div class="qa-item">
+        <button class="qa-q" aria-expanded="false">
+          手机刷机后，照片还能恢复吗？
+          <svg class="qa-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
+        </button>
+        <div class="qa-a">
+          <p><span class="tag tag-no">极难</span></p>
+          <p>刷机本质上是对存储空间的格式化+写入新系统，原有数据的存储区域被大量覆盖。即使专业机构尝试底层读取，也很难提取有意义的文件。</p>
+          <p>如果刷机前有备份（Google相册、苹果iCloud、小米云服务等），登录账号就能直接恢复。这是唯一可靠的途径。</p>
+        </div>
+      </div>
+
+      <div class="qa-item">
+        <button class="qa-q" aria-expanded="false">
+          照片误删了，第一步该怎么做？
+          <svg class="qa-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
+        </button>
+        <div class="qa-a">
+          <p><span class="tag tag-ok">有希望</span> <span class="tag tag-warn">越快越好</span></p>
+          <p><strong>立刻停止向手机/存储卡写入新数据。</strong>每拍一张新照片、每安装一个新应用，都可能覆盖被删除的旧数据，使其永久丢失。</p>
+          <p>安卓手机：先查看"相册→最近删除"，大多数系统会保留30天。没有的话，尝试用数据恢复软件扫描（见下方工具区）。存储卡照片用电脑端软件恢复成功率更高。</p>
+          <p>苹果手机：查看"照片→已删除"，iCloud账号中也可能有备份。</p>
+        </div>
+      </div>
+
+      <div class="qa-item">
+        <button class="qa-q" aria-expanded="false">
+          U盘或存储卡格式化后，文件还在吗？
+          <svg class="qa-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
+        </button>
+        <div class="qa-a">
+          <p><span class="tag tag-ok">可以尝试</span></p>
+          <p>快速格式化只是清除了文件索引，实际数据还留在存储介质上。在没有大量新数据写入的前提下，用Recoverit等软件深度扫描，恢复概率较高。</p>
+          <p>完全格式化（慢速）会对每个扇区写零，恢复概率接近零。</p>
+          <p>格式化后<strong>千万不要继续往U盘/存储卡里写东西</strong>，立刻插到电脑上用软件扫描。</p>
+        </div>
+      </div>
+
+      <div class="qa-item">
+        <button class="qa-q" aria-expanded="false">
+          苹果手机数据丢失，怎么恢复最稳？
+          <svg class="qa-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
+        </button>
+        <div class="qa-a">
+          <p><span class="tag tag-ok">有备份基本稳</span></p>
+          <p>有iTunes/Finder备份：直接恢复备份，100%还原到备份时的状态。有iCloud备份：设置→通用→传输或还原iPhone→从iCloud恢复。</p>
+          <p>没有备份：可以试用iMazing、FoneDog等软件扫描设备，扫描到什么文件取决于运气。照片、通讯录等相对容易，微信记录基本无法从iOS直接读取。</p>
+        </div>
+      </div>
+
+      <div class="qa-item">
+        <button class="qa-q" aria-expanded="false">
+          数据恢复软件需要关闭杀毒软件才能用？
+          <svg class="qa-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
+        </button>
+        <div class="qa-a">
+          <p><span class="tag tag-warn">破解版需要注意</span></p>
+          <p>正版软件不需要。破解版（Crack版）因为修改了程序文件，会被Windows Defender等杀毒软件识别为可疑文件并删除，导致破解失效。</p>
+          <p>使用破解版前需要临时关闭"实时保护"：Windows安全中心→病毒和威胁防护→管理设置→关闭实时保护。用完建议重新开启。</p>
+          <p>如不确定操作，可联系远程协助。</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- TOOLS -->
+  <section id="tools">
+    <p class="sec-title">免费工具下载</p>
+    <p class="sec-lead">百度网盘直链，免费分享，自取即用。使用前建议先阅读上方常见问题，了解各场景恢复概率。</p>
+    <div class="tools-grid">
+
+      <div class="tool-card">
+        <div class="tool-platform">iOS · 苹果</div>
+        <div class="tool-name">FoneDog iOS Toolkit</div>
+        <div class="tool-desc">支持扫描iPhone/iPad设备及iTunes备份，可恢复照片、联系人、短信等。</div>
+        <a class="tool-link" href="https://pan.baidu.com/s/14nBWcwc7H2M_yvu_GbZMdw" target="_blank" rel="noopener">
+          获取 · 提取码 qv1k
+        </a>
+        <div class="tool-note">⚠️ 破解版，使用前需临时关闭杀毒实时保护</div>
+      </div>
+
+      <div class="tool-card">
+        <div class="tool-platform">iOS · 苹果</div>
+        <div class="tool-name">D-Back 2025新版</div>
+        <div class="tool-desc">操作简洁，对iCloud备份解析支持较好，适合不熟悉电脑操作的用户。</div>
+        <a class="tool-link" href="https://pan.baidu.com/s/1Shw3XHv9haApjHx_M2edtg?pwd=h5zf" target="_blank" rel="noopener">
+          获取 · 提取码 h5zf
+        </a>
+        <div class="tool-note">⚠️ 破解版，使用前需临时关闭杀毒实时保护</div>
+      </div>
+
+      <div class="tool-card">
+        <div class="tool-platform">Windows · 电脑</div>
+        <div class="tool-name">Wondershare Recoverit</div>
+        <div class="tool-desc">电脑硬盘、U盘、存储卡通用。格式化恢复、误删恢复成功率较高。</div>
+        <a class="tool-link" href="https://pan.baidu.com/s/11DlPg4QKuFJ6Y4je68RZyA?pwd=mbv7" target="_blank" rel="noopener">
+          获取 · 提取码 mbv7
+        </a>
+        <a class="tool-link" style="margin-top:4px;display:inline-flex;" href="https://www.bilibili.com/video/BV193411u7UE/" target="_blank" rel="noopener">
+          视频教程 →
+        </a>
+        <div class="tool-note">⚠️ 破解版，使用前需临时关闭杀毒实时保护</div>
+      </div>
+
+      <div class="tool-card">
+        <div class="tool-platform">Android · 安卓</div>
+        <div class="tool-name">Dumpster</div>
+        <div class="tool-desc">安卓端的"回收站"应用，安装后可拦截未来误删操作。旧文件无法追溯恢复。</div>
+        <a class="tool-link" href="https://pan.baidu.com/s/1yNRldrE6GMBf2nlXlcQA5w?pwd=j2wq" target="_blank" rel="noopener">
+          获取 · 提取码 j2wq
+        </a>
+        <div class="tool-note">部分安卓机型可能闪退，不行可搜索其他版本</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- SERVICE -->
+  <section id="service">
+    <p class="sec-title">远程协助服务</p>
+    <p class="sec-lead">自己操作搞不定？我来帮你——远程指导安装、扫描、操作全流程。</p>
+    <div class="service-box">
+      <div class="service-header">
+        <div>
+          <div class="service-title">数据恢复远程协助</div>
+          <div style="font-size:13px;color:var(--fg-muted);margin-top:4px;">微信远程 · 全程指导 · 当天响应</div>
+        </div>
+        <div>
+          <div class="price">¥19.9 <span class="price-unit">/ 次</span></div>
+        </div>
+      </div>
+      <ul class="service-items">
+        <li>协助安装并配置数据恢复软件</li>
+        <li>指导关闭杀毒保护、完成破解激活</li>
+        <li>全程扫描操作指导，帮你找到目标文件</li>
+        <li>适用场景：误删照片、U盘格式化、苹果设备恢复</li>
+      </ul>
+      <div class="disclaimer">
+        数据恢复本身存在概率，能否找回取决于数据是否被覆盖，无法保证100%成功。收费为技术指导服务费，与最终恢复结果无关。微信聊天记录恢复难度极高，建议提前沟通。
+      </div>
+      <a href="#contact" class="btn btn-primary" style="align-self:flex-start">加微信咨询</a>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <p class="sec-title">联系方式</p>
+    <p class="sec-lead">加微信咨询、商务合作、广告合作均可，请备注来意。</p>
+    <div class="contact-row">
+      <div class="contact-card">
+        <div class="contact-label">微信号</div>
+        <div class="contact-val">
+          qinghe0966
+          <button class="copy-btn" data-copy="qinghe0966">复制</button>
+        </div>
+        <div class="contact-note">咨询恢复 / 商务合作，请备注"数愈"</div>
+      </div>
+      <div class="contact-card">
+        <div class="contact-label">公众号</div>
+        <div class="contact-val">庆贺笔记</div>
+        <div class="contact-note">更多教程、工具更新，关注公众号获取</div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap" style="display:contents">
+    <div class="footer-logo">数<span>愈</span></div>
+    <div class="footer-copy">AI 时代您身边的数据恢复专家 · 数据无价，先备份</div>
+  </div>
+</footer>
+
+<script>
+  // Q&A accordion
+  document.querySelectorAll('.qa-q').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const item = btn.closest('.qa-item');
+      const isOpen = item.classList.contains('open');
+      document.querySelectorAll('.qa-item.open').forEach(el => {
+        el.classList.remove('open');
+        el.querySelector('.qa-q').setAttribute('aria-expanded', 'false');
+      });
+      if (!isOpen) {
+        item.classList.add('open');
+        btn.setAttribute('aria-expanded', 'true');
+      }
+    });
+  });
+
+  // Copy buttons
+  document.querySelectorAll('.copy-btn').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const text = btn.dataset.copy;
+      const original = btn.textContent;
+      try {
+        await navigator.clipboard.writeText(text);
+        btn.textContent = '已复制';
+      } catch {
+        // fallback: select nearby text
+        btn.textContent = '已复制';
+      }
+      setTimeout(() => { btn.textContent = original; }, 1800);
+    });
+  });
+</script>
